@@ -283,7 +283,7 @@
 // ============================================================
 // CONFIGURACIÓN — reemplaza con tu URL de Google Apps Script
 // ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2REPxzfz0kIhnyIEs1y1B0LzvRkTqxrv_jSGXEiH9pPoUIavLCD5mE85tvHFO49YhBA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0Q-pNkAlmKy0GfmxWW2c1n_PIPmelOaBr8YdJDlUeLeAwq5qrZAxfzOebI91ezIZ9Zg/exec';
 // ============================================================
 
 const PRIZES = [
@@ -347,19 +347,54 @@ function updateUI() {
   }
 }
 
-// ---- Elegir premio con probabilidades acumuladas ----
+// ---- Cupos máximos fijos ----
+const CUPOS = { p1: 5, p2: 25, p3: 35 };
+
+// ---- Elegir premio según cupos disponibles en el servidor ----
 function pickPrize() {
-  const r = Math.random();
-  if (r < 0.05)  return PRIZES[0];
-  if (r < 0.30)  return PRIZES[1];
-  if (r < 0.65)  return PRIZES[2];
+  const disponible1 = globalStats.p1 < CUPOS.p1;
+  const disponible2 = globalStats.p2 < CUPOS.p2;
+  const disponible3 = globalStats.p3 < CUPOS.p3;
+
+  const opciones = [];
+  if (disponible1) opciones.push({ prize: PRIZES[0], peso: 5 });
+  if (disponible2) opciones.push({ prize: PRIZES[1], peso: 25 });
+  if (disponible3) opciones.push({ prize: PRIZES[2], peso: 35 });
+  opciones.push({ prize: PRIZES[3], peso: 35 });
+
+  const totalPeso = opciones.reduce((s, o) => s + o.peso, 0);
+  let r = Math.random() * totalPeso;
+  for (const op of opciones) {
+    r -= op.peso;
+    if (r <= 0) return op.prize;
+  }
   return PRIZES[3];
 }
 
+// ---- Obtener premio desde el servidor (ciclo exacto) ----
+async function fetchPremio() {
+  try {
+    const r = await fetch(APPS_SCRIPT_URL + '?action=getPremio');
+    const d = await r.json();
+    // d = { id, titulo, codigo, posicion }
+    const mapa = { 1: PRIZES[0], 2: PRIZES[1], 3: PRIZES[2], 4: PRIZES[3] };
+    const prize = { ...mapa[d.id], posicion: d.posicion };
+    return prize;
+  } catch(e) {
+    // fallback local si no hay conexión
+    return pickPrize();
+  }
+}
+
 // ---- Iniciar canvas de raspado ----
-function initCanvas() {
+async function initCanvas() {
   if (yaJugo) return;
-  currentPrize = pickPrize();
+
+  // Obtener premio del servidor ANTES de mostrar la tarjeta
+  document.getElementById('loading-msg').textContent = 'Preparando tu tarjeta...';
+  document.getElementById('loading').classList.add('show');
+  currentPrize = await fetchPremio();
+  document.getElementById('loading').classList.remove('show');
 
   const wrap = document.getElementById('scratch-wrap');
   const canvas = document.getElementById('sc');
@@ -472,6 +507,7 @@ async function revealPrize() {
         nombre: nombre,
         premio: p.id,
         titulo: p.title,
+        posicion: p.posicion || '',
         fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
       })
     });

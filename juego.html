@@ -4,203 +4,388 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tatequieto — Raspa y Gana</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --dark: #361214;
-    --orange: #f05b22;
-    --yellow: #faf1c0;
-    --cream: #fdf6ec;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 3rem;
-  }
+:root {
+  --dark: #361214;
+  --orange: #f05b22;
+  --yellow: #faf1c0;
+  --cream: #fdf6ec;
+}
 
-  header {
-    width: 100%;
-    background: var(--dark);
-    padding: 1.25rem 1.5rem 1.5rem;
-    text-align: center;
-    position: relative;
-    margin-bottom: 1.5rem;
-  }
-  header::after {
-    content: '';
-    position: absolute;
-    bottom: -14px; left: 0; right: 0; height: 14px;
-    background: repeating-linear-gradient(
-      -45deg, var(--orange) 0, var(--orange) 10px,
-      var(--dark) 10px, var(--dark) 20px
-    );
-  }
-  .brand-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 48px;
-    color: var(--orange);
-    letter-spacing: 4px;
-    line-height: 1;
-  }
-  .brand-sub { font-size: 13px; color: var(--yellow); margin-top: 4px; letter-spacing: 1px; }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-  .container { width: 100%; max-width: 480px; padding: 1rem 1.25rem; }
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--cream);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-bottom:3rem;
+}
 
-  /* GANADORES TICKER */
-  .winners-bar {
-    background: var(--dark);
-    border-radius: 10px;
-    padding: .7rem 1rem;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    overflow: hidden;
-  }
-  .winners-bar .icon { font-size: 18px; flex-shrink: 0; }
-  .ticker-wrap { overflow: hidden; flex: 1; }
-  .ticker-inner { display: flex; gap: 8px; flex-wrap: nowrap; }
-  .winner-chip {
-    display: inline-flex; align-items: center; gap: 4px;
-    background: var(--orange); color: #fff;
-    border-radius: 20px; padding: 3px 10px;
-    font-size: 12px; font-weight: 500;
-    white-space: nowrap; flex-shrink: 0;
-  }
+header{
+  width:100%;
+  background:var(--dark);
+  padding:1.25rem 1.5rem 1.5rem;
+  text-align:center;
+  position:relative;
+  margin-bottom:1.5rem;
+}
 
-  /* STATS */
-  .stats-grid {
-    display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
-    gap: 8px; margin-bottom: 1.25rem;
-  }
-  .stat-box {
-    background: #fff;
-    border: 1.5px solid #e8ddd0;
-    border-radius: 10px;
-    padding: .6rem .4rem;
-    text-align: center;
-  }
-  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--orange); line-height: 1; }
-  .stat-lbl { font-size: 10px; color: #888; margin-top: 3px; line-height: 1.2; }
+header::after{
+  content:'';
+  position:absolute;
+  bottom:-14px;
+  left:0;
+  right:0;
+  height:14px;
+  background:repeating-linear-gradient(
+    -45deg,
+    var(--orange) 0,
+    var(--orange) 10px,
+    var(--dark) 10px,
+    var(--dark) 20px
+  );
+}
 
-  /* NOMBRE BIENVENIDA */
-  .welcome {
-    text-align: center; margin-bottom: 1rem;
-    font-size: 15px; color: var(--dark); font-weight: 500;
-  }
-  .welcome span { color: var(--orange); }
+.brand-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:48px;
+  color:var(--orange);
+  letter-spacing:4px;
+  line-height:1;
+}
 
-  /* INSTRUCCION */
-  .instruccion {
-    text-align: center; font-size: 13px; color: var(--orange);
-    font-weight: 600; margin-bottom: .75rem; letter-spacing: .5px;
-    text-transform: uppercase;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .instruccion .finger { font-size: 20px; animation: bounce .8s ease-in-out infinite alternate; }
-  @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-6px); } }
+.brand-sub{
+  font-size:13px;
+  color:var(--yellow);
+  margin-top:4px;
+  letter-spacing:1px;
+}
 
-  /* TARJETA RASPA */
-  .scratch-wrap {
-    position: relative;
-    border-radius: 16px;
-    overflow: hidden;
-    border: 3px solid var(--orange);
-    margin-bottom: 1.25rem;
-    box-shadow: 0 4px 0 var(--dark);
-    cursor: crosshair;
-    touch-action: none;
-    user-select: none;
-  }
+.container{
+  width:100%;
+  max-width:480px;
+  padding:1rem 1.25rem;
+}
 
-  .prize-layer {
-    background: var(--dark);
-    min-height: 200px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2rem 1rem;
-    gap: 8px;
-  }
-  .prize-icon { font-size: 56px; }
-  .prize-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    color: var(--orange);
-    letter-spacing: 1px;
-    text-align: center;
-    line-height: 1.1;
-  }
-  .prize-sub { font-size: 14px; color: var(--yellow); text-align: center; }
-  .prize-code {
-    background: var(--orange);
-    color: #fff;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 22px;
-    letter-spacing: 3px;
-    padding: 6px 20px;
-    border-radius: 8px;
-    margin-top: 4px;
-    display: none;
-  }
+.winners-bar{
+  background:var(--dark);
+  border-radius:10px;
+  padding:.7rem 1rem;
+  margin-bottom:1rem;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  overflow:hidden;
+}
 
-  canvas#sc {
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 100%;
-    touch-action: none;
-  }
+.winners-bar .icon{
+  font-size:18px;
+  flex-shrink:0;
+}
 
-  /* RESULTADO */
-  .result-card {
-    display: none;
-    border-radius: 12px;
-    padding: 1.25rem;
-    text-align: center;
-    margin-bottom: 1rem;
-    border: 2px solid transparent;
-  }
-  .result-card.show { display: block; }
-  .result-card.win1 { background: #fff3e0; border-color: var(--orange); }
-  .result-card.win2 { background: #fff8e1; border-color: #f0c040; }
-  .result-card.win3 { background: #f1f8e9; border-color: #8bc34a; }
-  .result-card.lose { background: #fff; border-color: #e8ddd0; }
-  .result-icon { font-size: 36px; margin-bottom: 6px; }
-  .result-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 24px; color: var(--dark); letter-spacing: 1px;
-  }
-  .result-sub { font-size: 13px; color: #666; margin-top: 4px; }
+.ticker-wrap{
+  overflow:hidden;
+  flex:1;
+}
 
-  /* ALREADY PLAYED */
-  .played-msg {
-    display: none;
-    background: var(--dark);
-    border-radius: 12px;
-    padding: 2rem 1.5rem;
-    text-align: center;
-    margin-bottom: 1rem;
-  }
-  .played-msg.show { display: block; }
-  .played-msg .big { font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: var(--orange); }
-  .played-msg p { font-size: 14px; color: var(--yellow); margin-top: 8px; line-height: 1.5; }
+.ticker-inner{
+  display:flex;
+  gap:8px;
+  flex-wrap:nowrap;
+}
 
-  .loading-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(54,18,20,.75);
-    z-index: 100; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
-  }
-  .loading-overlay.show { display: flex; }
-  .spinner { width: 44px; height: 44px; border: 4px solid rgba(250,241,192,.3); border-top-color: var(--yellow); border-radius: 50%; animation: spin .8s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-overlay p { color: var(--yellow); font-size: 15px; font-weight: 500; }
+.winner-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  background:var(--orange);
+  color:#fff;
+  border-radius:20px;
+  padding:3px 10px;
+  font-size:12px;
+  font-weight:500;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:1.25rem;
+}
+
+.stat-box{
+  background:#fff;
+  border:1.5px solid #e8ddd0;
+  border-radius:10px;
+  padding:.6rem .4rem;
+  text-align:center;
+}
+
+.stat-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:26px;
+  color:var(--orange);
+  line-height:1;
+}
+
+.stat-lbl{
+  font-size:10px;
+  color:#888;
+  margin-top:3px;
+  line-height:1.2;
+}
+
+.welcome{
+  text-align:center;
+  margin-bottom:1rem;
+  font-size:15px;
+  color:var(--dark);
+  font-weight:500;
+}
+
+.welcome span{
+  color:var(--orange);
+}
+
+.instruccion{
+  text-align:center;
+  font-size:13px;
+  color:var(--orange);
+  font-weight:600;
+  margin-bottom:.75rem;
+  letter-spacing:.5px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+}
+
+.instruccion .finger{
+  font-size:20px;
+  animation:bounce .8s ease-in-out infinite alternate;
+}
+
+@keyframes bounce{
+  from{transform:translateY(0);}
+  to{transform:translateY(-6px);}
+}
+
+.scratch-wrap{
+  position:relative;
+  border-radius:16px;
+  overflow:hidden;
+  border:3px solid var(--orange);
+  margin-bottom:1.25rem;
+  box-shadow:0 4px 0 var(--dark);
+  cursor:crosshair;
+  touch-action:none;
+  user-select:none;
+}
+
+.prize-layer{
+  background:var(--dark);
+  min-height:200px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:2rem 1rem;
+  gap:8px;
+}
+
+.prize-icon{
+  font-size:56px;
+}
+
+.prize-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;
+  color:var(--orange);
+  letter-spacing:1px;
+  text-align:center;
+  line-height:1.1;
+}
+
+.prize-sub{
+  font-size:14px;
+  color:var(--yellow);
+  text-align:center;
+}
+
+.prize-code{
+  background:var(--orange);
+  color:#fff;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;
+  letter-spacing:3px;
+  padding:6px 20px;
+  border-radius:8px;
+  margin-top:4px;
+  display:none;
+}
+
+canvas#sc{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  touch-action:none;
+}
+
+.result-card{
+  display:none;
+  border-radius:12px;
+  padding:1.25rem;
+  text-align:center;
+  margin-bottom:1rem;
+  border:2px solid transparent;
+}
+
+.result-card.show{
+  display:block;
+}
+
+.result-card.win1{
+  background:#fff3e0;
+  border-color:var(--orange);
+}
+
+.result-card.win2{
+  background:#fff8e1;
+  border-color:#f0c040;
+}
+
+.result-card.win3{
+  background:#f1f8e9;
+  border-color:#8bc34a;
+}
+
+.result-card.lose{
+  background:#fff;
+  border-color:#e8ddd0;
+}
+
+.result-icon{
+  font-size:36px;
+  margin-bottom:6px;
+}
+
+.result-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:24px;
+  color:var(--dark);
+  letter-spacing:1px;
+}
+
+.result-sub{
+  font-size:13px;
+  color:#666;
+  margin-top:4px;
+}
+
+.played-msg{
+  display:none;
+  background:var(--dark);
+  border-radius:12px;
+  padding:2rem 1.5rem;
+  text-align:center;
+  margin-bottom:1rem;
+}
+
+.played-msg.show{
+  display:block;
+}
+
+.played-msg .big{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:22px;
+  color:var(--orange);
+}
+
+.played-msg p{
+  font-size:14px;
+  color:var(--yellow);
+  margin-top:8px;
+  line-height:1.5;
+}
+
+.loading-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(54,18,20,.75);
+  z-index:100;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:16px;
+}
+
+.loading-overlay.show{
+  display:flex;
+}
+
+.spinner{
+  width:44px;
+  height:44px;
+  border:4px solid rgba(250,241,192,.3);
+  border-top-color:var(--yellow);
+  border-radius:50%;
+  animation:spin .8s linear infinite;
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+
+.loading-overlay p{
+  color:var(--yellow);
+  font-size:15px;
+  font-weight:500;
+}
+
+/* BOTON INSTAGRAM */
+
+.ig-btn{
+  display:none;
+  width:100%;
+  text-align:center;
+  background:linear-gradient(45deg,#f58529,#dd2a7b,#8134af,#515bd4);
+  color:#fff;
+  text-decoration:none;
+  padding:14px 18px;
+  border-radius:12px;
+  font-weight:700;
+  font-size:15px;
+  margin-top:12px;
+  box-shadow:0 4px 0 rgba(0,0,0,.2);
+  transition:.2s ease;
+}
+
+.ig-btn:hover{
+  transform:translateY(-2px);
+}
+
+.ig-btn.show{
+  display:block;
+}
 </style>
 </head>
+
 <body>
 
 <div class="loading-overlay" id="loading">
@@ -215,315 +400,270 @@
 
 <div class="container">
 
-  <!-- GANADORES TICKER -->
-  <div class="winners-bar">
-    <span class="icon">🏆</span>
-    <div class="ticker-wrap">
-      <div class="ticker-inner" id="ticker">
-        <span style="font-size:12px;color:#f5c49a">Cargando ganadores...</span>
-      </div>
+<div class="welcome" id="welcome"></div>
+
+<div class="instruccion" id="instruccion">
+  <span class="finger">👆</span>
+  Raspa la tarjeta para ver tu premio
+</div>
+
+<div class="scratch-wrap" id="scratch-wrap">
+
+  <div class="prize-layer" id="prize-layer">
+    <div class="prize-icon" id="pz-icon">🎁</div>
+
+    <div class="prize-title" id="pz-title" style="color:#555">
+      ???
     </div>
+
+    <div class="prize-sub" id="pz-sub" style="color:#888">
+      Sigue raspando...
+    </div>
+
+    <div class="prize-code" id="pz-code"></div>
   </div>
 
-  <!-- STATS -->
-  <div class="stats-grid">
-    <div class="stat-box">
-      <div class="stat-num" id="cnt-total">0</div>
-      <div class="stat-lbl">Jugaron</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="cnt-p1">0</div>
-      <div class="stat-lbl">Gratis</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="cnt-p2">0</div>
-      <div class="stat-lbl">25% dcto</div>
-    </div>
-    <div class="stat-box">
-      <div class="stat-num" id="cnt-p3">0</div>
-      <div class="stat-lbl">10% dcto</div>
-    </div>
-  </div>
+  <canvas id="sc"></canvas>
+</div>
 
-  <!-- BIENVENIDA -->
-  <div class="welcome" id="welcome"></div>
+<!-- RESULTADO -->
 
-  <!-- YA JUGÓ -->
-  <div class="played-msg" id="played-msg">
-    <div class="big">¡Ya participaste!</div>
-    <p>Solo se permite una raspada por dispositivo. ¡Gracias por ser parte de Tatequieto!</p>
-  </div>
+<div class="result-card" id="result-card">
+  <div class="result-icon" id="r-icon"></div>
+  <div class="result-title" id="r-title"></div>
+  <div class="result-sub" id="r-sub"></div>
+</div>
 
-  <!-- INSTRUCCIÓN -->
-  <div class="instruccion" id="instruccion">
-    <span class="finger">👆</span> Raspa la tarjeta para ver tu premio
-  </div>
+<!-- BOTON INSTAGRAM -->
 
-  <!-- TARJETA -->
-  <div class="scratch-wrap" id="scratch-wrap">
-    <div class="prize-layer" id="prize-layer">
-      <div class="prize-icon" id="pz-icon">🎁</div>
-      <div class="prize-title" id="pz-title" style="color:#555">???</div>
-      <div class="prize-sub" id="pz-sub" style="color:#888">Sigue raspando...</div>
-      <div class="prize-code" id="pz-code"></div>
-    </div>
-    <canvas id="sc"></canvas>
-  </div>
-
-  <!-- RESULTADO -->
-  <div class="result-card" id="result-card">
-    <div class="result-icon" id="r-icon"></div>
-    <div class="result-title" id="r-title"></div>
-    <div class="result-sub" id="r-sub"></div>
-  </div>
+<a
+href="https://www.instagram.com/tatequieto_smokedspread?igsh=MWZhYTBid2MzdzQ0bA%3D%3D&utm_source=qr"
+target="_blank"
+id="ig-btn"
+class="ig-btn"
+>
+Visitar IG de Tatequieto
+</a>
 
 </div>
 
 <script>
-// ============================================================
-// CONFIGURACIÓN — reemplaza con tu URL de Google Apps Script
-// ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0Q-pNkAlmKy0GfmxWW2c1n_PIPmelOaBr8YdJDlUeLeAwq5qrZAxfzOebI91ezIZ9Zg/exec';
-// ============================================================
 
 const PRIZES = [
-  { id: 1, prob: 0.05, icon: '🎉', title: '¡Tatequieto GRATIS!', sub: 'Muestra esta pantalla para reclamar tu premio', code: 'TATEGRATIS', cls: 'win1' },
-  { id: 2, prob: 0.25, icon: '🥳', title: '25% de descuento', sub: 'Usa este código en tu próxima compra', code: 'TATE25', cls: 'win2' },
-  { id: 3, prob: 0.35, icon: '😊', title: '10% de descuento', sub: 'Usa este código en tu próxima compra', code: 'TATE10', cls: 'win3' },
-  { id: 4, prob: 0.35, icon: '💪', title: '¡Gracias por participar!', sub: 'Sigue disfrutando del mejor sabor', code: null, cls: 'lose' }
+{
+  id:1,
+  icon:'🎉',
+  title:'¡Tatequieto GRATIS!',
+  sub:'Muestra esta pantalla para reclamar tu premio',
+  code:'TATEGRATIS',
+  cls:'win1'
+},
+{
+  id:2,
+  icon:'🥳',
+  title:'25% de descuento',
+  sub:'Usa este código en tu próxima compra',
+  code:'TATE25',
+  cls:'win2'
+},
+{
+  id:3,
+  icon:'😊',
+  title:'10% de descuento',
+  sub:'Usa este código en tu próxima compra',
+  code:'TATE10',
+  cls:'win3'
+},
+{
+  id:4,
+  icon:'💪',
+  title:'¡Gracias por participar!',
+  sub:'Sigue disfrutando del mejor sabor',
+  code:null,
+  cls:'lose'
+}
 ];
 
 let scratching = false;
 let revealed = false;
-let currentPrize = null;
-let globalStats = { total: 0, p1: 0, p2: 0, p3: 0, winners: [] };
 
-// ---- Verificar si ya jugó ----
-const yaJugo = localStorage.getItem('tq_played') === '1';
-const nombre = localStorage.getItem('tq_nombre') || '';
+const currentPrize =
+PRIZES[Math.floor(Math.random()*PRIZES.length)];
 
-// Si no pasó por el formulario, redirigir
-if (!localStorage.getItem('tq_registered')) {
-  window.location.href = 'formulario.html';
-}
+function initCanvas(){
 
-// ---- Nombre de bienvenida ----
-if (nombre) {
-  document.getElementById('welcome').innerHTML = `Hola, <span>${nombre.split(' ')[0]}</span> 👋 Tu turno de raspar`;
-}
+const wrap = document.getElementById('scratch-wrap');
+const canvas = document.getElementById('sc');
+const layer = document.getElementById('prize-layer');
 
-// ---- Ya jugó ----
-if (yaJugo) {
-  document.getElementById('played-msg').classList.add('show');
-  document.getElementById('instruccion').style.display = 'none';
-  document.getElementById('scratch-wrap').style.display = 'none';
-}
+canvas.width = wrap.offsetWidth;
+canvas.height = layer.offsetHeight;
 
-// ---- Cargar estadísticas globales ----
-async function loadStats() {
-  try {
-    const r = await fetch(APPS_SCRIPT_URL + '?action=getStats');
-    const d = await r.json();
-    globalStats = d;
-    updateUI();
-  } catch (e) {
-    // Sin conexión, muestra ceros
-    updateUI();
+const ctx = canvas.getContext('2d');
+
+ctx.fillStyle = '#b0b0b0';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+ctx.fillStyle = '#a0a0a0';
+
+for(let x=0;x<canvas.width;x+=30){
+  for(let y=0;y<canvas.height;y+=30){
+    ctx.fillText('✦',x,y+20);
   }
 }
 
-function updateUI() {
-  document.getElementById('cnt-total').textContent = globalStats.total;
-  document.getElementById('cnt-p1').textContent = globalStats.p1;
-  document.getElementById('cnt-p2').textContent = globalStats.p2;
-  document.getElementById('cnt-p3').textContent = globalStats.p3;
+ctx.fillStyle = '#361214';
+ctx.font = 'bold 20px Bebas Neue';
+ctx.textAlign = 'center';
 
-  const ticker = document.getElementById('ticker');
-  if (!globalStats.winners || globalStats.winners.length === 0) {
-    ticker.innerHTML = '<span style="font-size:12px;color:#f5c49a">Sé el primero en ganar</span>';
-  } else {
-    ticker.innerHTML = globalStats.winners.slice(-8).reverse()
-      .map(w => `<span class="winner-chip">🏆 ${w}</span>`).join('');
-  }
+ctx.fillText(
+'✦ RASPA AQUÍ ✦',
+canvas.width/2,
+canvas.height/2-10
+);
+
+ctx.font = '13px DM Sans';
+ctx.fillStyle = '#444';
+
+ctx.fillText(
+'Arrastra el dedo sobre la tarjeta',
+canvas.width/2,
+canvas.height/2+16
+);
+
+ctx.globalCompositeOperation = 'destination-out';
+
+function pos(e,c){
+
+const rect = c.getBoundingClientRect();
+
+const src = e.touches ? e.touches[0] : e;
+
+return{
+  x:(src.clientX-rect.left)*(c.width/rect.width),
+  y:(src.clientY-rect.top)*(c.height/rect.height)
+};
+
 }
 
-// ---- Cupos máximos fijos ----
-const CUPOS = { p1: 5, p2: 25, p3: 35 };
+function doScratch(e){
 
-// ---- Elegir premio según cupos disponibles en el servidor ----
-function pickPrize() {
-  const disponible1 = globalStats.p1 < CUPOS.p1;
-  const disponible2 = globalStats.p2 < CUPOS.p2;
-  const disponible3 = globalStats.p3 < CUPOS.p3;
+if(!scratching || revealed) return;
 
-  const opciones = [];
-  if (disponible1) opciones.push({ prize: PRIZES[0], peso: 5 });
-  if (disponible2) opciones.push({ prize: PRIZES[1], peso: 25 });
-  if (disponible3) opciones.push({ prize: PRIZES[2], peso: 35 });
-  opciones.push({ prize: PRIZES[3], peso: 35 });
+e.preventDefault();
 
-  const totalPeso = opciones.reduce((s, o) => s + o.peso, 0);
-  let r = Math.random() * totalPeso;
-  for (const op of opciones) {
-    r -= op.peso;
-    if (r <= 0) return op.prize;
-  }
-  return PRIZES[3];
+const {x,y} = pos(e,canvas);
+
+ctx.beginPath();
+ctx.arc(x,y,36,0,Math.PI*2);
+ctx.fill();
+
+checkReveal(ctx,canvas);
+
 }
 
-// ---- Obtener premio desde el servidor (ciclo exacto) ----
-async function fetchPremio() {
-  try {
-    const r = await fetch(APPS_SCRIPT_URL + '?action=getPremio');
-    const d = await r.json();
-    // d = { id, titulo, codigo, posicion }
-    const mapa = { 1: PRIZES[0], 2: PRIZES[1], 3: PRIZES[2], 4: PRIZES[3] };
-    const prize = { ...mapa[d.id], posicion: d.posicion };
-    return prize;
-  } catch(e) {
-    // fallback local si no hay conexión
-    return pickPrize();
-  }
+canvas.addEventListener('mousedown',e=>{
+  scratching=true;
+  doScratch(e);
+});
+
+canvas.addEventListener('mousemove',doScratch);
+
+canvas.addEventListener('mouseup',()=>{
+  scratching=false;
+});
+
+canvas.addEventListener('touchstart',e=>{
+  scratching=true;
+  doScratch(e);
+},{passive:false});
+
+canvas.addEventListener('touchmove',doScratch,{passive:false});
+
+canvas.addEventListener('touchend',()=>{
+  scratching=false;
+});
+
 }
 
-// ---- Iniciar canvas de raspado ----
-async function initCanvas() {
-  if (yaJugo) return;
+function checkReveal(ctx,canvas){
 
-  // Obtener premio del servidor ANTES de mostrar la tarjeta
-  document.getElementById('loading-msg').textContent = 'Preparando tu tarjeta...';
-  document.getElementById('loading').classList.add('show');
-  currentPrize = await fetchPremio();
-  document.getElementById('loading').classList.remove('show');
+const data = ctx.getImageData(
+0,
+0,
+canvas.width,
+canvas.height
+).data;
 
-  const wrap = document.getElementById('scratch-wrap');
-  const canvas = document.getElementById('sc');
-  const layer = document.getElementById('prize-layer');
+let cleared = 0;
 
-  canvas.width  = wrap.offsetWidth  || 340;
-  canvas.height = layer.offsetHeight || 200;
+for(let i=3;i<data.length;i+=4){
 
-  const ctx = canvas.getContext('2d');
-
-  // Fondo de raspa (capa plateada)
-  ctx.fillStyle = '#b0b0b0';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Patrón decorativo
-  ctx.fillStyle = '#a0a0a0';
-  for (let x = 0; x < canvas.width; x += 30) {
-    for (let y = 0; y < canvas.height; y += 30) {
-      ctx.fillText('✦', x, y + 20);
-    }
-  }
-
-  ctx.fillStyle = '#361214';
-  ctx.font = 'bold 20px Bebas Neue, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.letterSpacing = '3px';
-  ctx.fillText('✦  RASPA AQUÍ  ✦', canvas.width / 2, canvas.height / 2 - 10);
-  ctx.font = '13px DM Sans, sans-serif';
-  ctx.fillStyle = '#444';
-  ctx.letterSpacing = '0px';
-  ctx.fillText('Arrastra el dedo sobre la tarjeta', canvas.width / 2, canvas.height / 2 + 16);
-
-  ctx.globalCompositeOperation = 'destination-out';
-
-  function pos(e, c) {
-    const rect = c.getBoundingClientRect();
-    const src  = e.touches ? e.touches[0] : e;
-    return { x: (src.clientX - rect.left) * (c.width / rect.width),
-             y: (src.clientY - rect.top)  * (c.height / rect.height) };
-  }
-
-  function doScratch(e) {
-    if (!scratching || revealed) return;
-    e.preventDefault();
-    const { x, y } = pos(e, canvas);
-    ctx.beginPath();
-    ctx.arc(x, y, 36, 0, Math.PI * 2);
-    ctx.fill();
-    checkReveal(ctx, canvas);
-  }
-
-  canvas.addEventListener('mousedown',  e => { scratching = true; doScratch(e); });
-  canvas.addEventListener('mousemove',  doScratch);
-  canvas.addEventListener('mouseup',    () => scratching = false);
-  canvas.addEventListener('touchstart', e => { scratching = true; doScratch(e); }, { passive: false });
-  canvas.addEventListener('touchmove',  doScratch, { passive: false });
-  canvas.addEventListener('touchend',   () => scratching = false);
+if(data[i]===0){
+  cleared++;
 }
 
-function checkReveal(ctx, canvas) {
-  const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-  let cleared = 0;
-  for (let i = 3; i < data.length; i += 4) if (data[i] === 0) cleared++;
-  const pct = cleared / (canvas.width * canvas.height);
-  if (pct > 0.55) revealPrize();
 }
 
-async function revealPrize() {
-  if (revealed) return;
-  revealed = true;
+const pct = cleared/(canvas.width*canvas.height);
 
-  const canvas = document.getElementById('sc');
-  canvas.style.display = 'none';
-  document.getElementById('instruccion').style.display = 'none';
-
-  const p = currentPrize;
-  document.getElementById('pz-icon').textContent  = p.icon;
-  document.getElementById('pz-title').textContent = p.title;
-  document.getElementById('pz-title').style.color = '#f05b22';
-  document.getElementById('pz-sub').textContent   = p.sub;
-  document.getElementById('pz-sub').style.color   = '#faf1c0';
-
-  if (p.code) {
-    const codeEl = document.getElementById('pz-code');
-    codeEl.textContent = p.code;
-    codeEl.style.display = 'block';
-  }
-
-  const rc = document.getElementById('result-card');
-  rc.className = 'result-card ' + p.cls + ' show';
-  document.getElementById('r-icon').textContent  = p.icon;
-  document.getElementById('r-title').textContent = p.title;
-  document.getElementById('r-sub').textContent   = p.sub;
-
-  // Marcar como jugado en este dispositivo
-  localStorage.setItem('tq_played', '1');
-
-  // Enviar resultado al backend
-  document.getElementById('loading-msg').textContent = 'Registrando tu resultado...';
-  document.getElementById('loading').classList.add('show');
-
-  const nombre = localStorage.getItem('tq_nombre') || 'Participante';
-  try {
-    await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'saveResult',
-        nombre: nombre,
-        premio: p.id,
-        titulo: p.title,
-        posicion: p.posicion || '',
-        fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
-      })
-    });
-  } catch(e) {}
-
-  document.getElementById('loading').classList.remove('show');
-
-  // Recargar stats
-  setTimeout(loadStats, 800);
+if(pct>0.55){
+  revealPrize();
 }
 
-// ---- Init ----
-loadStats();
-if (!yaJugo) {
-  setTimeout(initCanvas, 100);
 }
+
+function revealPrize(){
+
+if(revealed) return;
+
+revealed = true;
+
+document.getElementById('sc').style.display='none';
+
+document.getElementById('instruccion').style.display='none';
+
+const p = currentPrize;
+
+document.getElementById('pz-icon').textContent = p.icon;
+
+document.getElementById('pz-title').textContent = p.title;
+
+document.getElementById('pz-title').style.color = '#f05b22';
+
+document.getElementById('pz-sub').textContent = p.sub;
+
+document.getElementById('pz-sub').style.color = '#faf1c0';
+
+if(p.code){
+
+const codeEl = document.getElementById('pz-code');
+
+codeEl.textContent = p.code;
+
+codeEl.style.display = 'block';
+
+}
+
+const rc = document.getElementById('result-card');
+
+rc.className = 'result-card ' + p.cls + ' show';
+
+document.getElementById('r-icon').textContent = p.icon;
+
+document.getElementById('r-title').textContent = p.title;
+
+document.getElementById('r-sub').textContent = p.sub;
+
+/* MOSTRAR BOTON INSTAGRAM */
+
+document.getElementById('ig-btn').classList.add('show');
+
+}
+
+initCanvas();
+
 </script>
+
 </body>
 </html>

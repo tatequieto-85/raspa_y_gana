@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tatequieto — Registrate y raspa tu premio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #361214;
+    --orange: #f05b22;
+    --yellow: #faf1c0;
+    --cream: #fdf6ec;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 0 3rem;
+  }
+
+  header {
+    width: 100%;
+    background: var(--dark);
+    padding: 1.25rem 1.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -14px; left: 0; right: 0;
+    height: 14px;
+    background: repeating-linear-gradient(
+      -45deg,
+      var(--orange) 0, var(--orange) 10px,
+      var(--dark) 10px, var(--dark) 20px
+    );
+  }
+  .brand-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--orange);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+  .brand-sub {
+    font-size: 13px;
+    color: var(--yellow);
+    margin-top: 4px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .container {
+    width: 100%;
+    max-width: 500px;
+    padding: 1rem 1.25rem;
+  }
+
+  .intro-box {
+    background: var(--orange);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .intro-box .icon { font-size: 32px; flex-shrink: 0; }
+  .intro-box p { font-size: 14px; color: #fff; line-height: 1.5; font-weight: 500; }
+
+  .card {
+    background: var(--white);
+    border-radius: 16px;
+    border: 2px solid #e8ddd0;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--dark);
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+    padding-bottom: .5rem;
+    border-bottom: 2px solid var(--yellow);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .fgroup { margin-bottom: 1rem; }
+  .fgroup:last-child { margin-bottom: 0; }
+  .fgroup label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+  .fgroup label .opt {
+    font-weight: 400;
+    color: #999;
+    font-size: 12px;
+  }
+  .fgroup input {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    border: 1.5px solid #e0d5c8;
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--dark);
+    outline: none;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .fgroup input:focus {
+    border-color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(240,91,34,.12);
+    background: #fff;
+  }
+  .fgroup input.error { border-color: #e53935; }
+  .err-msg {
+    font-size: 12px;
+    color: #e53935;
+    margin-top: 4px;
+    display: none;
+  }
+  .err-msg.show { display: block; }
+
+  .rating-group { margin-bottom: 1rem; }
+  .rating-group:last-child { margin-bottom: 0; }
+  .rating-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .rating-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .rating-btn {
+    padding: 10px 8px;
+    border: 1.5px solid #e0d5c8;
+    border-radius: 10px;
+    background: var(--cream);
+    cursor: pointer;
+    text-align: center;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: #555;
+    line-height: 1.35;
+    transition: all .15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    user-select: none;
+  }
+  .rating-btn .emoji { font-size: 22px; }
+  .rating-btn:hover { border-color: var(--orange); background: #fff7f3; }
+  .rating-btn.selected {
+    border-color: var(--orange);
+    background: var(--orange);
+    color: #fff;
+  }
+  .rating-btn.error-border { border-color: #e53935; }
+
+  .submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--dark);
+    color: var(--orange);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+    margin-top: .5rem;
+  }
+  .submit-btn:hover { background: var(--orange); color: #fff; }
+  .submit-btn:active { transform: scale(.98); }
+  .submit-btn:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+
+  .legal {
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    margin-top: .75rem;
+  }
+
+  .toast {
+    display: none;
+    position: fixed;
+    top: 1rem; left: 50%;
+    transform: translateX(-50%);
+    background: #e53935;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 999;
+    white-space: nowrap;
+  }
+  .toast.show { display: block; }
+
+  .loading-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(54,18,20,.7);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .loading-overlay.show { display: flex; }
+  .spinner {
+    width: 48px; height: 48px;
+    border: 4px solid rgba(250,241,192,.3);
+    border-top-color: var(--yellow);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  .loading-overlay p { color: var(--yellow); font-size: 16px; font-weight: 500; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<div class="loading-overlay" id="loading">
+  <div class="spinner"></div>
+  <p>Guardando tu respuesta...</p>
+</div>
+
+<header>
+  <div class="brand-name">TATEQUIETO</div>
+  <div class="brand-sub">Raspa y gana tu premio</div>
+</header>
+
+<div class="container">
+
+  <div class="intro-box">
+    <div class="icon">🎁</div>
+    <p>Responde unas preguntas rápidas, raspa tu tarjeta y descubre si ganaste un premio.</p>
+  </div>
+
+  <!-- DATOS PERSONALES -->
+  <div class="card">
+    <div class="card-title">📋 Tus datos</div>
+    <div class="fgroup">
+      <label>Nombre completo</label>
+      <input type="text" id="f-nombre" placeholder="Ej. Carlos Martínez" autocomplete="name">
+      <div class="err-msg" id="err-nombre">Por favor ingresa tu nombre</div>
+    </div>
+    <div class="fgroup">
+      <label>Correo electrónico</label>
+      <input type="email" id="f-email" placeholder="correo@ejemplo.com" autocomplete="email">
+      <div class="err-msg" id="err-email">Por favor ingresa un correo válido</div>
+    </div>
+    <div class="fgroup">
+      <label>Celular <span class="opt">(opcional)</span></label>
+      <input type="tel" id="f-cel" placeholder="Ej. 3001234567" autocomplete="tel">
+    </div>
+  </div>
+
+  <!-- SABOR -->
+  <div class="card">
+    <div class="card-title">😋 Tu opinión</div>
+    <div class="rating-group" id="rg-sabor">
+      <div class="rating-label">¿Cómo te pareció el sabor del Tatequieto?</div>
+      <div class="rating-options">
+        <div class="rating-btn" data-group="sabor" data-value="No es para mi" onclick="select(this)">
+          <span class="emoji">🥱</span><span>No es para mí</span>
+        </div>
+        <div class="rating-btn" data-group="sabor" data-value="Normal, nada especial" onclick="select(this)">
+          <span class="emoji">😐</span><span>Normal, nada especial</span>
+        </div>
+        <div class="rating-btn" data-group="sabor" data-value="Está bueno" onclick="select(this)">
+          <span class="emoji">😊</span><span>Está bueno</span>
+        </div>
+        <div class="rating-btn" data-group="sabor" data-value="¡Está buenísimo!" onclick="select(this)">
+          <span class="emoji">😍</span><span>¡Está buenísimo!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NPS -->
+  <div class="card">
+    <div class="card-title">📣 ¿Lo recomendarías?</div>
+    <div class="rating-group" id="rg-recomienda">
+      <div class="rating-label">¿Qué tan probable es que le cuentes a alguien sobre el Tatequieto?</div>
+      <div class="rating-options">
+        <div class="rating-btn" data-group="recomienda" data-value="No, la verdad no" onclick="select(this)">
+          <span class="emoji">❌</span><span>No, la verdad no</span>
+        </div>
+        <div class="rating-btn" data-group="recomienda" data-value="Solo si me preguntan" onclick="select(this)">
+          <span class="emoji">👍</span><span>Solo si me preguntan</span>
+        </div>
+        <div class="rating-btn" data-group="recomienda" data-value="Sí, se lo diría a alguien" onclick="select(this)">
+          <span class="emoji">✨</span><span>Sí, se lo diría</span>
+        </div>
+        <div class="rating-btn" data-group="recomienda" data-value="Ya le estoy mandando el dato a mis amigos" onclick="select(this)">
+          <span class="emoji">📣</span><span>¡Ya les estoy mandando el dato!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPRA -->
+  <div class="card">
+    <div class="card-title">🛒 Intención de compra</div>
+    <div class="rating-group" id="rg-compra">
+      <div class="rating-label">Si lo encontraras en tu tienda favorita, ¿lo comprarías?</div>
+      <div class="rating-options">
+        <div class="rating-btn" data-group="compra" data-value="No lo compraría" onclick="select(this)">
+          <span class="emoji">❌</span><span>No lo compraría</span>
+        </div>
+        <div class="rating-btn" data-group="compra" data-value="Lo pensaría" onclick="select(this)">
+          <span class="emoji">🤔</span><span>Lo pensaría</span>
+        </div>
+        <div class="rating-btn" data-group="compra" data-value="Sí lo compraría" onclick="select(this)">
+          <span class="emoji">✅</span><span>Sí lo compraría</span>
+        </div>
+        <div class="rating-btn" data-group="compra" data-value="Me llevo varios" onclick="select(this)">
+          <span class="emoji">🔥</span><span>¡Me llevo varios!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="submit-btn" id="btn-submit" onclick="submitForm()">
+    RASPAR MI PREMIO →
+  </button>
+  <p class="legal">Al continuar aceptas el tratamiento de tus datos personales conforme a nuestra política de privacidad.</p>
+
+</div>
+
+<script>
+// ============================================================
+// CONFIGURACIÓN — reemplaza con tu URL de Google Apps Script
+// ============================================================
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0Q-pNkAlmKy0GfmxWW2c1n_PIPmelOaBr8YdJDlUeLeAwq5qrZAxfzOebI91ezIZ9Zg/exec';
+const JUEGO_URL = 'juego.html'; // ruta relativa al juego en tu repo
+// ============================================================
+
+const answers = { sabor: null, recomienda: null, compra: null };
+
+function select(btn) {
+  const group = btn.dataset.group;
+  // deselect others in group
+  document.querySelectorAll(`[data-group="${group}"]`).forEach(b => {
+    b.classList.remove('selected', 'error-border');
+  });
+  btn.classList.add('selected');
+  answers[group] = btn.dataset.value;
+}
+
+function showToast(msg, dur = 3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
+}
+
+function validate() {
+  let ok = true;
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+
+  // nombre
+  if (!nombre) {
+    document.getElementById('f-nombre').classList.add('error');
+    document.getElementById('err-nombre').classList.add('show');
+    ok = false;
+  } else {
+    document.getElementById('f-nombre').classList.remove('error');
+    document.getElementById('err-nombre').classList.remove('show');
+  }
+
+  // email
+  const emailRx = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRx.test(email)) {
+    document.getElementById('f-email').classList.add('error');
+    document.getElementById('err-email').classList.add('show');
+    ok = false;
+  } else {
+    document.getElementById('f-email').classList.remove('error');
+    document.getElementById('err-email').classList.remove('show');
+  }
+
+  // preguntas obligatorias
+  ['sabor','recomienda','compra'].forEach(g => {
+    if (!answers[g]) {
+      document.querySelectorAll(`[data-group="${g}"]`).forEach(b => b.classList.add('error-border'));
+      ok = false;
+    }
+  });
+
+  if (!ok) showToast('Por favor completa todos los campos requeridos');
+  return ok;
+}
+
+async function submitForm() {
+  if (!validate()) return;
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  document.getElementById('loading').classList.add('show');
+
+  const payload = {
+    nombre: document.getElementById('f-nombre').value.trim(),
+    email:  document.getElementById('f-email').value.trim(),
+    celular: document.getElementById('f-cel').value.trim(),
+    sabor: answers.sabor,
+    recomienda: answers.recomienda,
+    compra: answers.compra,
+    fecha: new Date().toLocaleString('es-CO', {timeZone:'America/Bogota'})
+  };
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'saveForm', data: payload })
+    });
+  } catch(e) {
+    // no-cors no devuelve error real; continúa de todas formas
+  }
+
+  // Marcar dispositivo como registrado
+  localStorage.setItem('tq_registered', '1');
+  localStorage.setItem('tq_nombre', payload.nombre);
+
+  document.getElementById('loading').classList.remove('show');
+  window.location.href = JUEGO_URL;
+}
+</script>
+</body>
+</html>

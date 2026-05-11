@@ -276,7 +276,7 @@
       <div class="err-msg" id="err-email">Por favor ingresa un correo válido</div>
     </div>
     <div class="fgroup">
-      <label>Celular <span class="opt">(opcional)</span></label>
+      <label>WhatsApp</label>
       <input type="tel" id="f-cel" placeholder="Ej. 3001234567" autocomplete="tel">
     </div>
   </div>
@@ -405,6 +405,15 @@ function validate() {
   } else {
     document.getElementById('f-email').classList.remove('error');
     document.getElementById('err-email').classList.remove('show');
+  }
+  // celular colombiano
+  const celular = document.getElementById('f-cel').value.trim();
+  const celRx = /^3\d{9}$/;
+  if (!celular || !celRx.test(celular)) {
+    document.getElementById('f-cel').classList.add('error');
+    ok = false;
+  } else {
+    document.getElementById('f-cel').classList.remove('error');
   }
 
   // preguntas obligatorias

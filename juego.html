@@ -199,51 +199,6 @@
   .spinner { width: 44px; height: 44px; border: 4px solid rgba(250,241,192,.3); border-top-color: var(--yellow); border-radius: 50%; animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-overlay p { color: var(--yellow); font-size: 15px; font-weight: 500; }
-
-  /* REDES SOCIALES */
-  .social-box {
-    background: var(--dark);
-    border-radius: 12px;
-    padding: 1.25rem;
-    text-align: center;
-    margin-top: .5rem;
-  }
-  .social-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    color: var(--yellow);
-    letter-spacing: 1px;
-    margin-bottom: 1rem;
-  }
-  .social-btns {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-  }
-  .social-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 22px;
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    color: #fff;
-    text-decoration: none;
-    transition: transform .15s, opacity .15s;
-    flex: 1;
-    justify-content: center;
-  }
-  .social-btn:hover { opacity: .85; transform: translateY(-2px); }
-  .social-btn:active { transform: scale(.97); }
-  .social-btn.instagram {
-    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-  }
-  .social-btn.tiktok {
-    background: #010101;
-    border: 1.5px solid #333;
-  }
 </style>
 </head>
 <body>
@@ -322,34 +277,13 @@
     <div class="result-sub" id="r-sub"></div>
   </div>
 
-  <!-- REDES SOCIALES -->
-  <div class="social-box">
-    <p class="social-title">¡Síguenos para más!</p>
-    <div class="social-btns">
-      <a href="https://www.instagram.com/tatequieto_smokedspread?igsh=MWZhYTBid2MzdzQ0bA%3D%3D&utm_source=qr" target="_blank" class="social-btn instagram">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="2" y="2" width="20" height="20" rx="5.5" stroke="white" stroke-width="2"/>
-          <circle cx="12" cy="12" r="4.5" stroke="white" stroke-width="2"/>
-          <circle cx="17.5" cy="6.5" r="1.2" fill="white"/>
-        </svg>
-        Instagram
-      </a>
-      <a href="https://www.tiktok.com/@tatequieto_smokedspread?_r=1&_t=ZS-96H81QgXIDC" target="_blank" class="social-btn tiktok">
-        <svg width="20" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
-        </svg>
-        TikTok
-      </a>
-    </div>
-  </div>
-
 </div>
 
 <script>
 // ============================================================
 // CONFIGURACIÓN — reemplaza con tu URL de Google Apps Script
 // ============================================================
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw0Q-pNkAlmKy0GfmxWW2c1n_PIPmelOaBr8YdJDlUeLeAwq5qrZAxfzOebI91ezIZ9Zg/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz2REPxzfz0kIhnyIEs1y1B0LzvRkTqxrv_jSGXEiH9pPoUIavLCD5mE85tvHFO49YhBA/exec';
 // ============================================================
 
 const PRIZES = [
@@ -413,54 +347,19 @@ function updateUI() {
   }
 }
 
-// ---- Cupos máximos fijos ----
-const CUPOS = { p1: 5, p2: 25, p3: 35 };
-
-// ---- Elegir premio según cupos disponibles en el servidor ----
+// ---- Elegir premio con probabilidades acumuladas ----
 function pickPrize() {
-  const disponible1 = globalStats.p1 < CUPOS.p1;
-  const disponible2 = globalStats.p2 < CUPOS.p2;
-  const disponible3 = globalStats.p3 < CUPOS.p3;
-
-  const opciones = [];
-  if (disponible1) opciones.push({ prize: PRIZES[0], peso: 5 });
-  if (disponible2) opciones.push({ prize: PRIZES[1], peso: 25 });
-  if (disponible3) opciones.push({ prize: PRIZES[2], peso: 35 });
-  opciones.push({ prize: PRIZES[3], peso: 35 });
-
-  const totalPeso = opciones.reduce((s, o) => s + o.peso, 0);
-  let r = Math.random() * totalPeso;
-  for (const op of opciones) {
-    r -= op.peso;
-    if (r <= 0) return op.prize;
-  }
+  const r = Math.random();
+  if (r < 0.05)  return PRIZES[0];
+  if (r < 0.30)  return PRIZES[1];
+  if (r < 0.65)  return PRIZES[2];
   return PRIZES[3];
 }
 
-// ---- Obtener premio desde el servidor (ciclo exacto) ----
-async function fetchPremio() {
-  try {
-    const r = await fetch(APPS_SCRIPT_URL + '?action=getPremio');
-    const d = await r.json();
-    // d = { id, titulo, codigo, posicion }
-    const mapa = { 1: PRIZES[0], 2: PRIZES[1], 3: PRIZES[2], 4: PRIZES[3] };
-    const prize = { ...mapa[d.id], posicion: d.posicion };
-    return prize;
-  } catch(e) {
-    // fallback local si no hay conexión
-    return pickPrize();
-  }
-}
-
 // ---- Iniciar canvas de raspado ----
-async function initCanvas() {
+function initCanvas() {
   if (yaJugo) return;
-
-  // Obtener premio del servidor ANTES de mostrar la tarjeta
-  document.getElementById('loading-msg').textContent = 'Preparando tu tarjeta...';
-  document.getElementById('loading').classList.add('show');
-  currentPrize = await fetchPremio();
-  document.getElementById('loading').classList.remove('show');
+  currentPrize = pickPrize();
 
   const wrap = document.getElementById('scratch-wrap');
   const canvas = document.getElementById('sc');
@@ -573,7 +472,6 @@ async function revealPrize() {
         nombre: nombre,
         premio: p.id,
         titulo: p.title,
-        posicion: p.posicion || '',
         fecha: new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
       })
     });
